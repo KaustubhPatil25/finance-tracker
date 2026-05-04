@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { collection, query, onSnapshot, orderBy } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { useAuth } from '../../context/AuthContext';
@@ -117,20 +117,19 @@ export default function DashboardOverview() {
     : 'None';
 
   // Default categories that are always available in the system
-  const defaultCategories = [
-    { id: 'food', name: 'Food', icon: '🍕' },
-    { id: 'transport', name: 'Transport', icon: '🚗' },
-    { id: 'entertainment', name: 'Entertainment', icon: '🎬' },
-    { id: 'utilities', name: 'Utilities', icon: '⚡' },
-    { id: 'rent', name: 'Rent', icon: '🏠' },
-    { id: 'other', name: 'Other', icon: '📦' }
-  ];
+  const defaultCategories = useMemo(() => [
+  { id: 'food', name: 'Food', icon: '🍕' },
+  { id: 'transport', name: 'Transport', icon: '🚗' },
+  { id: 'entertainment', name: 'Entertainment', icon: '🎬' },
+  { id: 'utilities', name: 'Utilities', icon: '⚡' },
+  { id: 'rent', name: 'Rent', icon: '🏠' },
+  { id: 'other', name: 'Other', icon: '📦' }
+], []); // empty deps — never changes
 
-  // Combine default categories with user-created custom categories
-  const allCategories = [
-    ...defaultCategories,
-    ...categories.map(cat => ({ ...cat, icon: '📊' }))
-  ];
+const allCategories = useMemo(() => [
+  ...defaultCategories,
+  ...categories.map(cat => ({ ...cat, icon: '📊' }))
+], [defaultCategories, categories]); // only rebuilds when categories changes
 
   /**
    * Prepare data for pie chart showing spending by category

@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
-import { collection, addDoc, query, onSnapshot, deleteDoc, doc, orderBy, updateDoc } from 'firebase/firestore';
+import { collection, query, onSnapshot, deleteDoc, doc, orderBy, updateDoc } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { useAuth } from '../../context/AuthContext';
-import { format } from 'date-fns';
 import Toast from '../UI/Toast';
 import '../../styles/main.css';
 import '../../styles/modal-forms.css';
@@ -12,12 +11,6 @@ import Modal from '../Modal';
 export default function Expenses() {
   const [expenses, setExpenses] = useState([]);
   const [setCategories] = useState([]);
-  const [newExpense] = useState({
-    title: '',
-    amount: '',
-    category: '',
-    date: format(new Date(), 'yyyy-MM-dd')
-  });
   const [setIsLoading] = useState(false);
   const [toast, setToast] = useState(null);
   const { currentUser } = useAuth();
@@ -138,64 +131,6 @@ export default function Expenses() {
     };
   }, [currentUser]);
 
-
-  const handleAddExpense = async (e) => {
-    e.preventDefault();
-    console.log('handleAddExpense called', newExpense);
-    
-    // Check if Firebase is configured
-    if (!db) {
-      console.error('Firebase not configured');
-      setToast({
-        message: 'Firebase not configured. Please set up your Firebase project.',
-        type: 'error'
-      });
-      return;
-    }
-    
-    // Check if user is authenticated
-    if (!currentUser) {
-      console.error('User not authenticated');
-      setToast({
-        message: 'Please log in to add expenses.',
-        type: 'error'
-      });
-      return;
-    }
-    
-    // Store the expense data before resetting
-    const expenseData = { ...newExpense };
-    
-    setIsLoading(true);
-    
-    try {
-      console.log('Attempting to add expense to Firebase...');
-      // Add the expense to the database
-      await addDoc(collection(db, 'users', currentUser.uid, 'expenses'), {
-        ...expenseData,
-        amount: parseFloat(expenseData.amount),
-        createdAt: new Date()
-      });
-      
-      console.log('Expense added successfully');
-      // Show success toast with date information
-      setToast({
-        message: `Expense "${expenseData.title}" added for ${format(new Date(expenseData.date), 'MMM dd, yyyy')}`,
-        type: 'success'
-      });
-      
-    } catch (error) {
-      console.error('Error adding expense: ', error);
-      // Show error toast
-      setToast({
-        message: 'Failed to add expense. Please try again.',
-        type: 'error'
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const handleDeleteExpense = async (id) => {
     const expense = expenses.find(exp => exp.id === id);
     if (window.confirm(`Are you sure you want to delete the expense "${expense?.title}" for $${expense?.amount.toFixed(2)}?`)) {
@@ -268,12 +203,6 @@ export default function Expenses() {
 
   const handleExpenseAdded = () => {
     setIsExpenseFormOpen(false);
-    // Optionally, refresh expenses here if needed
-  };
-
-  const handleExpenseEdited = () => {
-    setIsEditExpenseFormOpen(false);
-    setExpenseToEdit(null);
     // Optionally, refresh expenses here if needed
   };
 

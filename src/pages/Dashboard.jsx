@@ -4,6 +4,8 @@ import Sidebar from '../components/Layout/Sidebar';
 import Navbar from '../components/Layout/Navbar';
 import '../styles/main.css';
 
+const isMobile = () => window.innerWidth <= 768;
+
 export default function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(true); // Default to open on desktop
   const [isDragging, setIsDragging] = useState(false);
@@ -11,9 +13,6 @@ export default function Dashboard() {
   const [showEdgeIndicator, setShowEdgeIndicator] = useState(false);
   const sidebarRef = useRef(null);
   const overlayRef = useRef(null);
-  
-  // Check if we're on mobile
-  const isMobile = () => window.innerWidth <= 768;
   
   // Initialize sidebar state based on screen size
   useEffect(() => {
