@@ -11,22 +11,15 @@ import Modal from '../Modal';
 
 export default function Expenses() {
   const [expenses, setExpenses] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [newExpense, setNewExpense] = useState({
+  const [setCategories] = useState([]);
+  const [newExpense] = useState({
     title: '',
     amount: '',
     category: '',
     date: format(new Date(), 'yyyy-MM-dd')
   });
-  const [isLoading, setIsLoading] = useState(false);
+  const [setIsLoading] = useState(false);
   const [toast, setToast] = useState(null);
-  const [editingExpense, setEditingExpense] = useState({
-    id: '',
-    title: '',
-    amount: '',
-    category: '',
-    date: ''
-  });
   const { currentUser } = useAuth();
   const [isExpenseFormOpen, setIsExpenseFormOpen] = useState(false);
   const [isEditExpenseFormOpen, setIsEditExpenseFormOpen] = useState(false);

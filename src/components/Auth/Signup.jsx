@@ -4,9 +4,6 @@ import { useAuth } from '../../context/AuthContext';
 import { motion } from 'framer-motion';
 import '../../styles/main.css';
 
-import { db } from '../../firebase';
-import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
-
 /**
  * Signup Component
  * 
@@ -32,7 +29,7 @@ export default function Signup() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [passwordError, setPasswordError] = useState('');
+  const [passwordError] = useState('');
   const { signup } = useAuth();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);

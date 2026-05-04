@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from 'react';
 import { collection, query, onSnapshot, orderBy } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { useAuth } from '../../context/AuthContext';
-import { format } from 'date-fns';
 import { PieChart, LineChart } from '../Charts';
 import '../../styles/main.css';
 import '../../styles/dashboard-fixes.css';

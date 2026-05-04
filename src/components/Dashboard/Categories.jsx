@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { collection, addDoc, query, onSnapshot, deleteDoc, doc, updateDoc, getDocs } from 'firebase/firestore';
+import { collection, addDoc, query, onSnapshot } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { useAuth } from '../../context/AuthContext';
 import PieChart from '../Charts/PieChart';
@@ -162,10 +162,6 @@ export default function Categories() {
     setNewCategory('');
   };
 
-  const toggleMenu = (categoryId) => {
-    setMenuOpen(menuOpen === categoryId ? null : categoryId);
-  };
-
   const handleAddCategory = async (e) => {
     e.preventDefault();
     if (!db) { setToast({ message: 'Firebase not configured. Please set up your Firebase project.', type: 'error' }); return; }
@@ -311,7 +307,6 @@ export default function Categories() {
             {allCategories.map((category) => {
               const categoryAmount = categoryData.datasets[0].data[categoryData.labels.indexOf(category.name)] || 0;
               const percentage = totalSpent > 0 ? (categoryAmount / totalSpent) * 100 : 0;
-              const isDefaultCategory = defaultCategories.some(dc => dc.name === category.name);
               
               return (
                 <div key={category.id} className="category-card">
